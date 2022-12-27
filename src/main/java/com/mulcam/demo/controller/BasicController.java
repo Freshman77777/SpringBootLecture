@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/basic")
 public class BasicController {
-	
+
 	@RequestMapping("/basic")
 	public String basic() {
 		return "basic/basic";
@@ -24,7 +25,7 @@ public class BasicController {
 	@ResponseBody
 	@RequestMapping("/basic1")
 	public String basic1() {
-		return "<h1>@Controller에서는 문자열을 웹화면으로 보낼 때 @ResponseBody를 사용</h1>";
+		return "<h1>@Controller에서는 문자열을 웹화면으로 보낼때 @ResponseBody를 사용</h1>";
 	}
 	
 	@RequestMapping("/basic2")
@@ -39,15 +40,15 @@ public class BasicController {
 	
 	// 파라메터 패싱
 	@RequestMapping("/basic3")
-	public String basic3(@RequestParam(name="id", defaultValue = "1")String id) {
-		System.out.print("id:" + id);
-		return "redirect:/basic/basic" + id;		// Redirection
+	public String basic3(@RequestParam(name="id", defaultValue="1")String id) {
+		System.out.println("id: " + id);
+		return "redirect:/basic/basic" + id;	// Redirection
 	}
 	
 	// Servlet에서는 안되던 방식
 	@RequestMapping("/basic4/{id}")
 	public String basic4(@PathVariable int id) {
-		System.out.print("id:" + id);
+		System.out.println("id: " + id);
 		return "redirect:/basic/basic" + id;
 	}
 	
@@ -55,7 +56,15 @@ public class BasicController {
 	@RequestMapping("/basic5")
 	public String basic5(HttpServletRequest req) {
 		String id = req.getParameter("id");
-		System.out.print("id:" + id);
+		System.out.println("id: " + id);
 		return "redirect:/basic/basic" + id;
+	}
+	
+	// 기존 방식의 세션도 사용 가능
+	@RequestMapping("/basic11")
+	public String basic11(HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		session.setAttribute("uname", "Spring");
+		return "redirect:/user/list";
 	}
 }
